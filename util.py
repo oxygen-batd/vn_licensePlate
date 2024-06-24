@@ -1,13 +1,19 @@
 from paddleocr import PaddleOCR
 import cv2
 
-# init paddleOCR
-ocr = PaddleOCR(use_angle_cls=True, lang='en', det =False)
+ocr = PaddleOCR(
+    use_angle_cls=True,
+    lang='en',
+    det =True,
+    det_algorithm='DB',
+    rec_algorithm='SVTR_LCNet')
 
-def read_license_plate(license_plate_crop):
+def read_license_plate(license_plate_crop, zoom_factor=10):
     try:
+        zoomed_crop = cv2.resize(license_plate_crop, None, fx=zoom_factor, fy=zoom_factor, interpolation=cv2.INTER_LINEAR)
+        
         # Convert license plate crop to RGB (PaddleOCR requires RGB)
-        license_plate_crop_rgb = cv2.cvtColor(license_plate_crop, cv2.COLOR_BGR2RGB)
+        license_plate_crop_rgb = cv2.cvtColor(zoomed_crop, cv2.COLOR_BGR2RGB)
         
         # Perform OCR
         results = ocr.ocr(license_plate_crop_rgb, cls=True)
