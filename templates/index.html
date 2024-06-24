@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> YoLov8 + PaddleOCR</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .image-container {
+            display: flex;
+            justify-content: space-around;
+            width: 100%;
+            margin-top: 20px;
+        }
+        .image-box {
+            flex: 1;
+            text-align: center;
+            margin: 0 10px;
+        }
+        .image-box img {
+            max-width: 100%;
+            height: auto;
+        }
+        .upload-form {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1> YoLov8 + PaddleOCR </h1>
+        <form action="/" method="post" enctype="multipart/form-data" class="upload-form">
+            <input type="file" name="file">
+            <input type="submit" value="Process">
+        </form>
+
+        {% if filename %}
+        <div class="image-container">
+            <div class="image-box">
+                <h2>Before</h2>
+                <img src="{{ url_for('uploaded_file', filename=filename) }}">
+            </div>
+            <div class="image-box">
+                <h2>After</h2>
+                <img src="{{ url_for('output_file', filename=filename) }}">
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</body>
+</html>
