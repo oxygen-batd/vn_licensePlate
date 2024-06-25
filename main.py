@@ -4,7 +4,8 @@ from werkzeug.utils import secure_filename
 import torch
 from ultralytics import YOLO
 import cv2
-from util import read_license_plate
+from util import read_license_plate, limit_text_within_image
+import numpy as np
 
 app = Flask(__name__)
 
@@ -34,16 +35,24 @@ def process_image(file_path, filename):
 
         # Convert coordinates to integers
         x1, y1, x2, y2 = int(x1), int(y1), int(x2), int(y2)
-
-        # Crop license plate region from the image
         license_plate_crop = image[y1:y2, x1:x2]
 
         license_plate_text = read_license_plate(license_plate_crop)
-        print("License Plate Text:", license_plate_text)
 
         if license_plate_text is not None:
             cv2.rectangle(image, (x1, y1), (x2, y2), (0, 0, 255), 3)
-            cv2.putText(image, license_plate_text, (x1, y1 - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.9, (36, 255, 12), 2)
+
+            # Define text parameters
+            font = cv2.FONT_HERSHEY_SIMPLEX
+            font_scale = 0.9
+            thickness = 2
+            
+            # Limit text within image boundaries
+            text_org = (x1, y1 - 10)
+            text_org = limit_text_within_image(image, license_plate_text, text_org, font, font_scale, thickness)
+            
+            # Draw text on image
+            cv2.putText(image, license_plate_text, text_org, font, font_scale, (36, 255, 12), thickness)
             
     output_image_path = f'static/output/{filename}'
     cv2.imwrite(output_image_path, image)
