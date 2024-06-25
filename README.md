@@ -24,6 +24,7 @@ Link ví dụ: https://app.roboflow.com/o23ps6a/license_plates_vietnam/deploy
 
 ![image](https://github.com/oxygen-batd/vn_licensePlate/assets/167840668/87d5640a-e3ec-4b0c-a9f1-c4579a87e0c9)
 
+4. Các thuộc tính quan trọng khi thực hiện task **predict** : https://docs.ultralytics.com/modes/predict/#working-with-results
 
 Tài liệu tham khảo:
 
